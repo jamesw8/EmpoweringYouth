@@ -16,7 +16,7 @@ import AppBar from 'material-ui/AppBar';
 import {withStyles} from 'material-ui/styles';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-
+import Input from 'material-ui/Input';
 import Geolocation from "./Geolocation";
 
 
@@ -89,26 +89,27 @@ class Grids extends Component {
 
 	render() {
 		return (
-			<Grid container spacing={8}>
+			<Grid container spacing={8} >
 				{this.getComponent} 
 				<Geolocation ref={this.geolocRef} />
-				<Grid item xs={12} sm={12} md={12} lg={12}>
-					<AppBar position="static" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: "20vh", "margin-top": "10vh"}} alignItems="center" color="">
-						<Toolbar>
-							<Typography variant="title" style={{color: "#f44336"}}>
+				<AppBar style={{borderRadius: "5px", backgroundColor: "#E8EAF6", minHeight:"300px", display: 'flex', justifyContent: 'center', alignItems: 'center'}} color="">
+						<Toolbar style={{backgroundColor: "#E8EAF6"}}>
+							<Typography style={{backgroundColor: "#E8EAF6"}}>
 								<CSSTransitionGroup
-									transitionName="appear"
+									transitionName="appear" 
 									transitionAppear={true}
 									transitionAppearTimeout={500}
 									transitionEnterTimeout={500}
 									transitionLeave={false}>
-									<h2 key={this.state.current}>
+									<h2 key={this.state.current} style={{ fontSize: "60px", backgroundColor: "#E8EAF6"}}>
 									 	Current: {this.state.nums[this.state.current]}
 									</h2>
 								</CSSTransitionGroup>
 							</Typography>
 						</Toolbar>
 					</AppBar>
+				<Grid style={{backgroundColor: "red", position: "relative", top: 0}} item xs={12} sm={12} md={12} lg={12}>
+					
 
 				</Grid>
 				<Grid item xs={12} sm={12} md={12} lg={12}>
@@ -135,8 +136,8 @@ class Grids extends Component {
 						</div>
 						<div className = "user">
 							<form className="message-form" onSubmit={this.handleSubmit}>
-								<MuiThemeProvider theme={theme}>
-									<TextField className="message-field" value={this.state.message} onChange={this.handleChange} hintText="Please let me know how we can help ex: I want to see a doctor. " fullWidth={true} defaultValue="will focus"/>	
+								<MuiThemeProvider theme={theme}>	
+								<Input fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px"}} />
 								<input type="submit" value="submit" hidden />
 								</MuiThemeProvider>
 							</form>
