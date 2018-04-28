@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 import json
+import random
 # import IBM API
 
 app = Flask(__name__)
@@ -12,8 +13,9 @@ def index():
 
 # Mock
 @app.route('/msg', methods=['POST'])
-def chatbot():
-	return json.loads(list(request.form.keys())[0])['message']
+def sendMessage():
+	return str(random.random())
+	# return json.loads(list(request.form.keys())[0])['message']
 	# print(request.args)
 	# return request.form.get('message') or request.args.get('message')
 	# API call here to IBM watson assistant API
