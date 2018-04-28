@@ -113,16 +113,6 @@ class App extends Component {
 									</Grid>
 							</Grid>
 						</div>
-						<div>
-					      <Grid container spacing={12}>
-					        <Grid item xs={6}>
-					          <Paper>xs=6</Paper>
-					        </Grid>
-					        <Grid item xs={6}>
-					          <Paper>xs=6</Paper>
-					        </Grid>
-					       </Grid>
-					     </div>
 						<div className = "user">
 							<form onSubmit={this.handleSubmit}>
 								<input type="text" value={this.state.message} onChange={this.handleChange} />
