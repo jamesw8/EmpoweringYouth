@@ -9,6 +9,7 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import TextField from 'material-ui/TextField'
 import Geolocation from "./Geolocation";
 
 class App extends Component {
@@ -116,7 +117,8 @@ class App extends Component {
 						</div>
 						<div className = "user">
 							<form onSubmit={this.handleSubmit}>
-								<input type="text" value={this.state.message} onChange={this.handleChange} />
+								<TextField hintText="Please let me know how we can help ex: I want to see a doctor. " fullWidth={true}/>
+								<input type="text" value={this.state.message} onChange={this.handleChange} hidden/>
 								<input type="submit" value="submit" hidden />
 							</form>
 						</div>

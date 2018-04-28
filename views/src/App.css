@@ -1,5 +1,7 @@
-body {
-  padding-bottom: 1em;
+html, body {
+  padding: 1em;
+  height: 100%;
+  position: relative;
 }
 
 .App {
@@ -51,6 +53,7 @@ body {
   transition: opacity 500ms ease-in;
 }
 
-input {
-  width: 90%;
+.user {
+    position: absolute;
+    bottom: 150px;
 }
