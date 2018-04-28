@@ -2,6 +2,7 @@ html, body {
   padding: 1em;
   height: 100%;
   position: relative;
+  border-color: black;
 }
 
 .App {
@@ -54,6 +55,12 @@ html, body {
 }
 
 .user {
+    width: 100%;
     position: absolute;
     bottom: 150px;
+    
+}
+
+input {
+  font-size: large;
 }
