@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {geolocated, geoPropTypes} from 'react-geolocated';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card'
 
 class Geolocation extends Component {
 	render() {
-		return(!this.props.isGeolocationAvailable
-	      ? <div>Your browser does not support Geolocation</div>
+		return(!this.props.isGeolocationAvailable? <div>Your browser does not support Geolocation</div>
 	      : !this.props.isGeolocationEnabled
 	        ? <div>Geolocation is not enabled</div>
 	        : this.props.coords
@@ -27,4 +27,3 @@ export default geolocated({
     },
     userDecisionTimeout: 5000,
 })(Geolocation);
-
