@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import left from './left_arrow.svg';
+import right from './right_arrow.svg';
 import './App.css';
 
 import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
 import {geolocated} from 'react-geolocated';
+import Grid from 'material-ui/Grid'
+import Paper from 'material-ui/Paper'
+import Button from 'material-ui/Button'
+
 
 function geolocation() {
 	return(!this.props.isGeolocationAvailable
@@ -74,33 +80,51 @@ class App extends Component {
 
 	render() {
 		return (
-			<div className="App">
-				<header className="App-header">
-					<img src={logo} className="App-logo" alt="logo" />
-					<input type="button" onClick={this.handleBackwardClick} value="Previous" />
-					<input type="button" onClick={this.handleForwardClick} value="Next" />
-					<h1 className="App-title">{this.state.nums.join()}</h1>
-					
-						<CSSTransitionGroup
-							transitionName="appear"
-							transitionAppear={true}
-							transitionAppearTimeout={500}
-							transitionEnterTimeout={500}
-							transitionLeave={false}>
-							<h2 key={this.state.current}>
-							 	Current: {this.state.nums[this.state.current]}
-							</h2>
-						</CSSTransitionGroup>
-	
-				</header>
-				<p className="App-intro">
-					To get started, edit <code>src/App.js</code> and save to reload.
-				</p>
-				<form onSubmit={this.handleSubmit}>
-					<input type="text" value={this.state.message} onChange={this.handleChange} />
-					<input type="submit" value="submit" hidden />
-				</form>
-			</div>
+			<Grid container spacing={8}>
+				<Grid item xs={12} sm={12} md={12} lg={12}>
+					<div className="App">
+						<header className="App-header">
+							<img src={logo} className="App-logo" alt="logo" />
+							<h1 className="App-title">{this.state.nums.join()}</h1>
+							
+								<CSSTransitionGroup
+									transitionName="appear"
+									transitionAppear={true}
+									transitionAppearTimeout={500}
+									transitionEnterTimeout={500}
+									transitionLeave={false}>
+									<h2 key={this.state.current}>
+									 	Current: {this.state.nums[this.state.current]}
+									</h2>
+								</CSSTransitionGroup>
+			
+						</header>
+						<div className = "center">
+							<Grid container>
+								<Grid item>
+									<Grid item xs={8}>
+										<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
+									</Grid>
+									<Grid item xs={8}>
+										<Paper className="App-intro">
+											To get started, edit <code>src/App.js</code> and save to reload.
+										</Paper>
+									</Grid>
+									<Grid item xs={8}>
+										<img src={right} className="right-arrow" onClick={this.handleForwardClick}/>
+									</Grid>
+								</Grid>
+							</Grid>
+						</div>
+						<div className = "user">
+							<form onSubmit={this.handleSubmit}>
+								<input type="text" value={this.state.message} onChange={this.handleChange} />
+								<input type="submit" value="submit" hidden />
+							</form>
+						</div>
+					</div>
+				</Grid>
+			</Grid>
 		);
 	}
 }
