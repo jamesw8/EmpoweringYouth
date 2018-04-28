@@ -38,7 +38,7 @@ class Grids extends Component {
 
 	async handleSubmit(event) {
 		event.preventDefault();
-    	event.target.reset();
+		this.setState({message: ""});
 		// Handle fetch here
 		let message;
 		await axios.post('http://localhost:5000/msg', 
@@ -134,9 +134,9 @@ class Grids extends Component {
 							</Grid>
 						</div>
 						<div className = "user">
-							<form onSubmit={this.handleSubmit}>
+							<form className="message-form" onSubmit={this.handleSubmit}>
 								<MuiThemeProvider theme={theme}>
-									<TextField value={this.state.message} onChange={this.handleChange} hintText="Please let me know how we can help ex: I want to see a doctor. " fullWidth={true} defaultValue="will focus"/>	
+									<TextField className="message-field" value={this.state.message} onChange={this.handleChange} hintText="Please let me know how we can help ex: I want to see a doctor. " fullWidth={true} defaultValue="will focus"/>	
 								<input type="submit" value="submit" hidden />
 								</MuiThemeProvider>
 							</form>
