@@ -8,7 +8,7 @@ import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
-import Button from 'material-ui/Button'
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import Geolocation from "./Geolocation";
 
 class App extends Component {
@@ -79,12 +79,13 @@ class App extends Component {
 	render() {
 		return (
 			<Grid container spacing={8}>
+			{this.getComponent} 
 			<Geolocation ref={this.geolocRef} />
 				<Grid item xs={12} sm={12} md={12} lg={12}>
 					<div className="App">
 						<header className="App-header">
-							<img src={logo} className="App-logo" alt="logo" />
 							<h1 className="App-title">{this.state.nums.join()}</h1>
+
 							
 								<CSSTransitionGroup
 									transitionName="appear"
@@ -99,7 +100,7 @@ class App extends Component {
 			
 						</header>
 						<div className = "center">
-							<Grid container spacing={12}>
+							<Grid container spacing={24}>
 									<Grid item xs={2}>
 										<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
 									</Grid>
