@@ -1,15 +1,19 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for, send_from_directory, send_file
 from flask_cors import CORS
 import json
 import random
+import os
 # import IBM API
 
-app = Flask(__name__)
+app = Flask(__name__, 
+	static_folder='views/build/static'
+	)
 CORS(app)
 
 @app.route('/', methods=['GET'])
 def index():
-	return 'hi'
+	return send_file('views/build/index.html')
+	# return send_file_directory('index.html', url_for('views/build'))
 
 # Mock
 @app.route('/msg', methods=['POST'])
@@ -23,4 +27,4 @@ def sendMessage():
 
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000, threaded=True, debug=True)
+	app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), threaded=True, debug=True)
