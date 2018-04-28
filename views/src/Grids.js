@@ -11,8 +11,14 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import Card from 'material-ui/Card';
+import {Card, CardActions, CardHeader, CardMedia, CardText} from 'material-ui';
+import AppBar from 'material-ui/AppBar';
+import {withStyles} from 'material-ui/styles';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+
 import Geolocation from "./Geolocation";
+
 
 class Grids extends Component {
 	constructor(props) {
@@ -48,6 +54,7 @@ class Grids extends Component {
 	}
 
 	handleChange(event) {
+		console.log(event.target.value);
 		this.setState({message: event.target.value});
 	}
 
@@ -82,14 +89,12 @@ class Grids extends Component {
 	render() {
 		return (
 			<Grid container spacing={8}>
-			{this.getComponent} 
-			<Geolocation ref={this.geolocRef} />
+				{this.getComponent} 
+				<Geolocation ref={this.geolocRef} />
 				<Grid item xs={12} sm={12} md={12} lg={12}>
-					<div className="App">
-						<header className="App-header">
-							<h1 className="App-title">{this.state.nums.join()}</h1>
-
-							
+					<AppBar position="static" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: "20vh", "margin-top": "10vh"}} alignItems="center" color="">
+						<Toolbar>
+							<Typography variant="title" style={{color: "#f44336"}}>
 								<CSSTransitionGroup
 									transitionName="appear"
 									transitionAppear={true}
@@ -100,6 +105,17 @@ class Grids extends Component {
 									 	Current: {this.state.nums[this.state.current]}
 									</h2>
 								</CSSTransitionGroup>
+							</Typography>
+						</Toolbar>
+					</AppBar>
+
+				</Grid>
+				<Grid item xs={12} sm={12} md={12} lg={12}>
+					<div className="App">
+						<header className="App-header">
+							<h1 className="App-title">{this.state.nums.join()}</h1>
+							
+								
 			
 						</header>
 						<div className = "center">
@@ -108,7 +124,7 @@ class Grids extends Component {
 										<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
 									</Grid>
 									<Grid item xs={8}>
-										<Card>
+										<Card className="">
 										</Card>
 									</Grid>
 									<Grid item xs={2}>
