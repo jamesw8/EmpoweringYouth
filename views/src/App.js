@@ -32,7 +32,6 @@ class App extends Component {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}
 		}).then(response => message = response);
-		alert(typeof(message.data));
 		this.setState({nums: this.state.nums.concat(message.data)});
 	}
 
@@ -65,6 +64,8 @@ class App extends Component {
 					
 						<CSSTransitionGroup
 							transitionName="appear"
+							transitionAppear={true}
+							transitionAppearTimeout={500}
 							transitionEnterTimeout={500}
 							transitionLeave={false}>
 							<h2 key={this.state.current}>
