@@ -6,7 +6,7 @@ import './App.css';
 
 import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -38,6 +38,7 @@ class Grids extends Component {
 
 	async handleSubmit(event) {
 		event.preventDefault();
+    	event.target.reset();
 		// Handle fetch here
 		let message;
 		await axios.post('http://localhost:5000/msg', 
@@ -134,9 +135,10 @@ class Grids extends Component {
 						</div>
 						<div className = "user">
 							<form onSubmit={this.handleSubmit}>
-								<TextField hintText="Please let me know how we can help ex: I want to see a doctor. " fullWidth={true}/>
-								<input type="text" value={this.state.message} onChange={this.handleChange} />
+								<MuiThemeProvider theme={theme}>
+									<TextField value={this.state.message} onChange={this.handleChange} hintText="Please let me know how we can help ex: I want to see a doctor. " fullWidth={true} defaultValue="will focus"/>	
 								<input type="submit" value="submit" hidden />
+								</MuiThemeProvider>
 							</form>
 						</div>
 					</div>
@@ -145,5 +147,29 @@ class Grids extends Component {
 		);
 	}
 }
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiInput: {
+      underline: {
+      	size: 'large',
+        color: 'black',
+        '&:hover:not($disabled):after': {
+          backgroundColor: '#00FFFF',
+        },
+        '&:hover:not($disabled):before': {
+          backgroundColor: '#00FFFF',
+        },
+        '&:hover:($disabled):after': {
+          backgroundColor: '#00FFFF',
+        },
+        '&:hover:($disabled):before': {
+          backgroundColor: '#00FFFF',
+        },
+      },
+    },
+  },
+});
+
 
 export default Grids;
