@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jamesw8/EmpoweringYouth/issues"
   },
-  "homepage": "https://github.com/jamesw8/EmpoweringYouth#readme"
+  "homepage": "https://github.com/jamesw8/EmpoweringYouth#readme",
+  "dependencies": {
+    "react-simple-chatbot": "^0.2.9"
+  }
 }
