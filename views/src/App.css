@@ -28,11 +28,20 @@
   to { transform: rotate(360deg); }
 }
 
+.appear-appear {
+  opacity: 0.01;
+}
+
+.appear-appear.appear-appear-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
 .appear-enter {
   opacity: 0.01;
 }
 
 .appear-enter-active {
   opacity: 1;
-  transition: opacity 300ms ease-in;
+  transition: opacity 500ms ease-in;
 }
