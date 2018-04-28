@@ -6,29 +6,10 @@ import './App.css';
 
 import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
-import {geolocated} from 'react-geolocated';
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
 import Button from 'material-ui/Button'
-
-
-function geolocation() {
-	return(!this.props.isGeolocationAvailable
-      ? <div>Your browser does not support Geolocation</div>
-      : !this.props.isGeolocationEnabled
-        ? <div>Geolocation is not enabled</div>
-        : this.props.coords
-          ? <table>
-            <tbody>
-              <tr><td>latitude</td><td>{this.props.coords.latitude}</td></tr>
-              <tr><td>longitude</td><td>{this.props.coords.longitude}</td></tr>
-              <tr><td>altitude</td><td>{this.props.coords.altitude}</td></tr>
-              <tr><td>heading</td><td>{this.props.coords.heading}</td></tr>
-              <tr><td>speed</td><td>{this.props.coords.speed}</td></tr>
-            </tbody>
-          </table>
-          : <div>Getting the location data&hellip; </div>);
-}
+import Geolocation from "./Geolocation";
 
 class App extends Component {
 	constructor(props) {
@@ -38,10 +19,12 @@ class App extends Component {
 			nums: [],
 			current: 0,
 		};
+		this.geolocRef = React.createRef();
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleForwardClick = this.handleForwardClick.bind(this);
 		this.handleBackwardClick = this.handleBackwardClick.bind(this);
+		this.handleCoordinates = this.handleCoordinates.bind(this);
 	}
 
 	async handleSubmit(event) {
@@ -54,6 +37,7 @@ class App extends Component {
 		},
 		{
 			headers: {
+				'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}
 		}).then(response => message = response);
@@ -64,7 +48,21 @@ class App extends Component {
 		this.setState({message: event.target.value});
 	}
 
+	async handleCoordinates() {
+		await axios.post('http://localhost:5000/sendCoordinates',
+		{
+			latitude: this.geolocRef.current.state.coords.latitude,
+			longitude: this.geolocRef.current.state.coords.longitude,
+		},
+		{
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		});
+	}
 	handleForwardClick(event) {
+		console.log((this.geolocRef.current.state.coords));
 		if (this.state.current + 1 < this.state.nums.length)
 			this.setState({current: this.state.current + 1});
 		else
@@ -81,6 +79,7 @@ class App extends Component {
 	render() {
 		return (
 			<Grid container spacing={8}>
+			<Geolocation ref={this.geolocRef} />
 				<Grid item xs={12} sm={12} md={12} lg={12}>
 					<div className="App">
 						<header className="App-header">
@@ -100,9 +99,8 @@ class App extends Component {
 			
 						</header>
 						<div className = "center">
-							<Grid container>
-								<Grid item>
-									<Grid item xs={8}>
+							<Grid container spacing={12}>
+									<Grid item xs={2}>
 										<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
 									</Grid>
 									<Grid item xs={8}>
@@ -110,12 +108,21 @@ class App extends Component {
 											To get started, edit <code>src/App.js</code> and save to reload.
 										</Paper>
 									</Grid>
-									<Grid item xs={8}>
+									<Grid item xs={2}>
 										<img src={right} className="right-arrow" onClick={this.handleForwardClick}/>
 									</Grid>
-								</Grid>
 							</Grid>
 						</div>
+						<div>
+					      <Grid container spacing={12}>
+					        <Grid item xs={6}>
+					          <Paper>xs=6</Paper>
+					        </Grid>
+					        <Grid item xs={6}>
+					          <Paper>xs=6</Paper>
+					        </Grid>
+					       </Grid>
+					     </div>
 						<div className = "user">
 							<form onSubmit={this.handleSubmit}>
 								<input type="text" value={this.state.message} onChange={this.handleChange} />
@@ -129,46 +136,4 @@ class App extends Component {
 	}
 }
 
-class MessageForm extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			message: "",
-			num: 0,
-		};
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		
-	}
-
-	async handleSubmit(event) {
-		event.preventDefault();
-		// Handle fetch here
-		let message;
-		await axios.post('http://localhost:5000/msg', 
-		{
-			message: this.state.message
-		}, 
-		{
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-			}
-		}).then(response => message = response);
-		alert(typeof(message.data));
-		this.setState({num: message.data});
-	}
-
-	handleChange(event) {
-		this.setState({message: event.target.value});
-	}
-
-	render() {
-		return (
-			<form onSubmit={this.handleSubmit}>
-				<input type="text" value={this.state.message} onChange={this.handleChange} />
-				<input type="submit" value="submit" hidden />
-			</form>
-		)
-	}
-}
 export default App;
