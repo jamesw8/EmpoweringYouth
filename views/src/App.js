@@ -4,25 +4,8 @@ import './App.css';
 
 import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
-import {geolocated} from 'react-geolocated';
 
-function geolocation() {
-	return(!this.props.isGeolocationAvailable
-      ? <div>Your browser does not support Geolocation</div>
-      : !this.props.isGeolocationEnabled
-        ? <div>Geolocation is not enabled</div>
-        : this.props.coords
-          ? <table>
-            <tbody>
-              <tr><td>latitude</td><td>{this.props.coords.latitude}</td></tr>
-              <tr><td>longitude</td><td>{this.props.coords.longitude}</td></tr>
-              <tr><td>altitude</td><td>{this.props.coords.altitude}</td></tr>
-              <tr><td>heading</td><td>{this.props.coords.heading}</td></tr>
-              <tr><td>speed</td><td>{this.props.coords.speed}</td></tr>
-            </tbody>
-          </table>
-          : <div>Getting the location data&hellip; </div>);
-}
+import Geolocation from "./Geolocation";
 
 class App extends Component {
 	constructor(props) {
@@ -32,10 +15,12 @@ class App extends Component {
 			nums: [],
 			current: 0,
 		};
+		this.geolocRef = React.createRef();
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleForwardClick = this.handleForwardClick.bind(this);
 		this.handleBackwardClick = this.handleBackwardClick.bind(this);
+		this.handleCoordinates = this.handleCoordinates.bind(this);
 	}
 
 	async handleSubmit(event) {
@@ -48,6 +33,7 @@ class App extends Component {
 		},
 		{
 			headers: {
+				'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}
 		}).then(response => message = response);
@@ -58,7 +44,21 @@ class App extends Component {
 		this.setState({message: event.target.value});
 	}
 
+	async handleCoordinates() {
+		await axios.post('http://localhost:5000/sendCoordinates',
+		{
+			latitude: this.geolocRef.current.state.coords.latitude,
+			longitude: this.geolocRef.current.state.coords.longitude,
+		},
+		{
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		});
+	}
 	handleForwardClick(event) {
+		console.log((this.geolocRef.current.state.coords));
 		if (this.state.current + 1 < this.state.nums.length)
 			this.setState({current: this.state.current + 1});
 		else
@@ -79,6 +79,7 @@ class App extends Component {
 					<img src={logo} className="App-logo" alt="logo" />
 					<input type="button" onClick={this.handleBackwardClick} value="Previous" />
 					<input type="button" onClick={this.handleForwardClick} value="Next" />
+					<input type="button" onClick={this.handleCoordinates} value="Send Coordinates" />
 					<h1 className="App-title">{this.state.nums.join()}</h1>
 					
 						<CSSTransitionGroup
@@ -91,7 +92,8 @@ class App extends Component {
 							 	Current: {this.state.nums[this.state.current]}
 							</h2>
 						</CSSTransitionGroup>
-	
+						<Geolocation ref={this.geolocRef} />
+						<h1>{console.log((this.geolocRef))}</h1>
 				</header>
 				<p className="App-intro">
 					To get started, edit <code>src/App.js</code> and save to reload.
@@ -114,12 +116,10 @@ class MessageForm extends Component {
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		
 	}
 
 	async handleSubmit(event) {
 		event.preventDefault();
-		// Handle fetch here
 		let message;
 		await axios.post('http://localhost:5000/msg', 
 		{
