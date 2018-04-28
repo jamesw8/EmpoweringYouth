@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/jamesw8/EmpoweringYouth#readme",
   "dependencies": {
-    "react-simple-chatbot": "^0.2.9"
   },
   "devDependencies": {
     "create-react-app": "^1.5.2"
