@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import left from './left_arrow.svg';
 import right from './right_arrow.svg';
 import './App.css';
-
 import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
@@ -22,6 +21,7 @@ import Geolocation from "./Geolocation";
 class Grids extends Component {
 	constructor(props) {
 		super(props);
+		this.appName = "NYC Resource Assistant";
 		axios.post('http://localhost:5000/msg', 
 			{
 				text: ""
@@ -42,7 +42,7 @@ class Grids extends Component {
 			});
 		this.state = {
 			message: "",
-			history: ["Welcome to [insert app name]! My job is to help connect you to resources such as free or affordable medical or mental health treatment. How can I help?", "question"],
+			history: ["Welcome to " + this.appName + "My job is to help connect you to resources such as free or affordable medical or mental health treatment. How can I help?"],
 			current: 0,
 		};
 		console.log("hi"+this.state.history[this.state.current]);
@@ -169,52 +169,50 @@ class Grids extends Component {
 			isQuestion = false;
 		}
 		return (
-
-			<div style={{marginBottom: '40px', flexGrow: 1}}>
-				<Grid container style={{width:'100%'}}>
-					<Geolocation ref={this.geolocRef} />
-					<Grid item xs md onClick={this.handleBackwardClick} style={{width: '100%', cursor: 'pointer', display: 'flex', justifyContent: 'flex-start', alignItems: 'stretch'}}>
-						<div className="arrow">
-							<img src={left} className="left-arrow"  />
-						</div>
+			<div className="container" >
+				<Geolocation ref={this.geolocRef} />
+				<Grid item className="msg" xs={12}>
+					Welcome to NYC Resource Assistant
+				</Grid>
+				<Grid className="main" container spacing={24}>
+					<Grid item xs={2}>
+						<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
 					</Grid>
-					<Grid item xs={11} md={11}>
-						<AppBar position="static" style={{borderRadius: "30px", backgroundColor: "#E8EAF6", minHeight:"300px", display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: "0"}} color="">
-							<Toolbar style={{backgroundColor: "#E8EAF6"}}>
-
-								<Typography style={{backgroundColor: "#E8EAF6"}}>
-
-									<CSSTransitionGroup
-										transitionName="appear" 
-										transitionAppear={true}
-										transitionAppearTimeout={500}
-										transitionEnterTimeout={500}
-										transitionLeave={false}>
-
-										<h2 className="output" key={this.state.current} style={{ fontSize: "24px", backgroundColor: "#E8EAF6"}}>
-										 	{this.state.history[this.state.current][0]}
-										</h2> 
-										
-									</CSSTransitionGroup>
-								</Typography>
-							</Toolbar>
-						</AppBar>
-					</Grid>
-					<Grid item xs md style={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-end', alignItems: 'stretch'}}>
-						<div className="arrow">
-							<img src={right} className="right-arrow" onClick={this.handleForwardClick} />
-						</div>
+						<Grid item xs={8}>
+							<Grid container spacing={12}>
+								<Grid item className="talk" xs={12}>
+									<Grid container className="watson" spacing={12}>	
+										<Grid item xs={12}>
+											<CSSTransitionGroup
+												transitionName="appear" 
+												transitionAppear={true}
+												transitionAppearTimeout={500}
+												transitionEnterTimeout={500}
+												transitionLeave={false}>
+												<p className="output" key={this.state.current}>
+										 			{this.state.history[this.state.current][0]}
+												</p>
+											</CSSTransitionGroup>
+										</Grid>
+									</Grid>
+									<Grid container className="user" spacing={12}>			
+										<Grid item xs={12}>
+										<form className="message-form" onSubmit={this.handleSubmit}>
+											<MuiThemeProvider theme={theme}>	
+												<Input placeholder="Let us know how we can help you. ex: I feel sick" fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px", fontFamily: 'Raleway'}} />
+												<input type="submit" value="submit" hidden />
+											</MuiThemeProvider>
+										</form>	
+									</Grid>		
+									</Grid>			
+								</Grid>
+							</Grid>
+						</Grid>
+					<Grid item xs={2}>
+						<img src={right} className="right-arrow" onClick={this.handleForwardClick}/>
 					</Grid>
 				</Grid>
-				<div className = "user">
-					<form className="message-form" onSubmit={this.handleSubmit}>
-						<MuiThemeProvider theme={theme}>	
-						<Input fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px"}} />
-						<input type="submit" value="submit" hidden />
-						</MuiThemeProvider>
-					</form>
-				</div>
-			</div>
+			</div>		
 		);
 	}
 }	
