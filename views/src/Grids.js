@@ -42,10 +42,9 @@ class Grids extends Component {
 			});
 		this.state = {
 			message: "",
-			history: ["Welcome to " + this.appName + "My job is to help connect you to resources such as free or affordable medical or mental health treatment. How can I help?"],
+			history: [["Welcome to " + this.appName + ". My job is to help connect you to resources such as free or affordable medical or mental health treatment. How can I help?", "question"]],
 			current: 0,
 		};
-		console.log("hi"+this.state.history[this.state.current]);
 		this.geolocRef = React.createRef();
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -147,19 +146,18 @@ class Grids extends Component {
 		console.log((this.geolocRef.current.state.coords));
 		if (this.state.current + 1 < this.state.history.length)
 			this.setState({current: this.state.current + 1});
-		else
-			alert(this.state.current + ' No!');
+		else {}
 	}
 
 	handleBackwardClick(event) {
 		if (this.state.current - 1 >= 0)
 			this.setState({current: this.state.current - 1});
-		else
-			alert(this.state.current + 'No!');
+		else {}
 	}
 
 	render() {
-		console.log(this.state.history[this.state.current][0]);
+		console.log("Render [0]");
+		console.log(typeof(this.state.history[this.state.current]));
 		let isQuestion = this.state.history[this.state.current][1] == "question";
 		console.log("Render Current: " + this.state.current);
 		if (this.state.history[this.state.current][1] == "question") {
@@ -176,7 +174,7 @@ class Grids extends Component {
 				</Grid>
 				<Grid className="main" container spacing={24}>
 					<Grid item xs={2}>
-						<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
+						<img src={left} className="left-arrow" onClick={this.handleBackwardClick} hidden={this.state.current == 0}/>
 					</Grid>
 						<Grid item xs={8}>
 							<Grid container spacing={12}>
@@ -189,10 +187,37 @@ class Grids extends Component {
 												transitionAppearTimeout={500}
 												transitionEnterTimeout={500}
 												transitionLeave={false}>
+												{ isQuestion 
+													? (
 												<p className="output" key={this.state.current}>
 										 			{this.state.history[this.state.current][0]}
 												</p>
-												
+												) : (
+													<div>
+														<p style={{marginTop: "10px", marginBottom: "20px", padding:0}}>Here are some resources that may help</p>
+														<Table>
+													        <TableHead>
+													          <TableRow>
+													            <TableCell style={{fontFamily: "Raleway", fontSize: "2rem"}}>Name</TableCell>
+													            <TableCell style={{fontFamily: "Raleway", fontSize: "2rem"}}>Address</TableCell>
+													            <TableCell style={{fontFamily: "Raleway", fontSize: "2rem"}}>Telephone</TableCell>
+													          </TableRow>
+													        </TableHead>
+													        <TableBody>
+													          {this.state.history[this.state.current][0].map((row, index) => {
+													            return (
+													              <TableRow className="table-row"key={index}>
+													                <TableCell className="table-cell" style={{fontFamily: "Raleway", fontSize: "1.5rem"}}>{row["Name"]}</TableCell>
+													                <TableCell className="table-cell" style={{fontFamily: "Raleway", fontSize: "1.5rem"}}>{row["Address"]}</TableCell>
+													                <TableCell className="table-cell" style={{fontFamily: "Raleway", fontSize: "1.5rem"}}>{row["Telephone"]}</TableCell>
+													              </TableRow>
+													            );
+													          })
+													      }
+													    	</TableBody>
+													    </Table>
+													</div>
+												)}
 											</CSSTransitionGroup>
 										</Grid>
 									</Grid>
@@ -200,7 +225,7 @@ class Grids extends Component {
 										<Grid item xs={12}>
 										<form className="message-form" onSubmit={this.handleSubmit}>
 											<MuiThemeProvider theme={theme}>	
-												<Input placeholder="Let us know how we can help you. ex: I feel sick" fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px", fontFamily: 'Raleway'}} />
+												<Input placeholder="Let us know how we can help you. ex: I feel sick" fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "30px", fontFamily: 'Raleway'}} />
 												<input type="submit" value="submit" hidden />
 											</MuiThemeProvider>
 										</form>	
@@ -210,7 +235,7 @@ class Grids extends Component {
 							</Grid>
 						</Grid>
 					<Grid item xs={2}>
-						<img src={right} className="right-arrow" onClick={this.handleForwardClick}/>
+						<img src={right} className="right-arrow" onClick={this.handleForwardClick} />
 					</Grid>
 				</Grid>
 			</div>		
