@@ -9,7 +9,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import Table ,{TableBody, TableHead, TableCell, TableRow} from 'material-ui/Table';
 import {Card, CardActions, CardHeader, CardMedia, CardText} from 'material-ui';
 import AppBar from 'material-ui/AppBar';
 import {withStyles} from 'material-ui/styles';
@@ -33,10 +33,11 @@ class Grids extends Component {
 				}
 			}).then(response => {
 				console.log(response);
+				console.log([response.data['text'],response.data['type']]);
 				this.setState({
 					context: response.data['context'],
-					history: [].concat(response.data['text']),
-					type: response.data['type']
+					history: [[response.data['text'], response.data['type']]],
+					current: 0
 				});
 			});
 		this.state = {
@@ -44,6 +45,7 @@ class Grids extends Component {
 			history: ["Welcome to " + this.appName + "My job is to help connect you to resources such as free or affordable medical or mental health treatment. How can I help?"],
 			current: 0,
 		};
+		console.log("hi"+this.state.history[this.state.current]);
 		this.geolocRef = React.createRef();
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -109,13 +111,18 @@ class Grids extends Component {
 				message = response;
 			});
 		}
+		let history = this.state.history;
+		history.push([message.data['text'], message.data['type']]);
+		console.log("new history");
+		console.log(history);
 		this.setState({
 			context: message.data['context'],
-			history: this.state.history.concat(message.data['text']),
-			current: this.state.history.length - 1,
-			type: message.data['type']
+			history: history,
+			current: this.state.history.length - 1
 		});
 		console.log(message.data['context'])
+		console.log(this.state.history);
+		console.log(this.state.history[this.state.history.length - 1]);
 	}
 
 	handleChange(event) {
@@ -141,17 +148,26 @@ class Grids extends Component {
 		if (this.state.current + 1 < this.state.history.length)
 			this.setState({current: this.state.current + 1});
 		else
-			alert(this.current + ' No!');
+			alert(this.state.current + ' No!');
 	}
 
 	handleBackwardClick(event) {
 		if (this.state.current - 1 >= 0)
 			this.setState({current: this.state.current - 1});
 		else
-			alert(this.current + 'No!');
+			alert(this.state.current + 'No!');
 	}
 
 	render() {
+		console.log(this.state.history[this.state.current][0]);
+		let isQuestion = this.state.history[this.state.current][1] == "question";
+		console.log("Render Current: " + this.state.current);
+		if (this.state.history[this.state.current][1] == "question") {
+		// 	console.log("yes");
+			isQuestion = true;
+		} else {
+			isQuestion = false;
+		}
 		return (
 			<div className="container" >
 				<Geolocation ref={this.geolocRef} />
@@ -174,7 +190,7 @@ class Grids extends Component {
 												transitionEnterTimeout={500}
 												transitionLeave={false}>
 												<p className="output" key={this.state.current}>
-										 			{this.state.history[this.state.current]}
+										 			{this.state.history[this.state.current][0]}
 												</p>
 											</CSSTransitionGroup>
 										</Grid>
