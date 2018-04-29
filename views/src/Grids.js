@@ -183,7 +183,7 @@ class Grids extends Component {
 										<Grid item xs={12}>
 										<form className="message-form" onSubmit={this.handleSubmit}>
 											<MuiThemeProvider theme={theme}>	
-												<Input fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px", fontFamily: 'Raleway'}} />
+												<Input placeholder="Let us know how we can help you. ex: I feel sick" fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px", fontFamily: 'Raleway'}} />
 												<input type="submit" value="submit" hidden />
 											</MuiThemeProvider>
 										</form>	
