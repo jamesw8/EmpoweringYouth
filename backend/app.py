@@ -6,7 +6,7 @@ import json
 from flask_cors import CORS
 from data import get_info
 
-data_csv = "datdatatho.csv"
+data_csv = "data_with_location.csv"
 
 assistant = AssistantV1(
     username=os.environ['IBM_CLOUD_USER'],
@@ -19,15 +19,9 @@ CORS(app)
 
 @app.route("/msg", methods=["POST"])
 def process_message():
-    req = json.loads(list(request.form.keys())[0])
-    # print(req)
-    if "context" in req:
-        print(req['text'])
-        print(req['context'])
-
-    if "context" in req:
+    if "context" in request.form:
         response = assistant.message(workspace_id=os.environ['IBM_WORKSPACE_ID'],
-            input={'text': req['text']}, context= req['context'])
+            input={'text': request.form['text']}, context= json.loads(request.form['context']))
     else:
         response = assistant.message(workspace_id=os.environ['IBM_WORKSPACE_ID'],
             input={'text': ""})
@@ -35,7 +29,7 @@ def process_message():
     retval = {}
     if response["output"]["text"][-1][:2] == "%%":
         retval["type"] = "info"
-        retval["info"] = get_info(response["output"]["text"])
+        retval["text"] = get_info(response["output"]["text"])
 
     else:
         retval["type"] = "question"
