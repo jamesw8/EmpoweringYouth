@@ -19,13 +19,29 @@ import Typography from 'material-ui/Typography';
 import Input from 'material-ui/Input';
 import Geolocation from "./Geolocation";
 
-
 class Grids extends Component {
 	constructor(props) {
 		super(props);
+		axios.post('http://localhost:5000/msg', 
+			{
+				text: ""
+			},
+			{
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then(response => {
+				console.log(response);
+				this.setState({
+					context: response.data['context'],
+					history: [].concat(response.data['text']),
+					type: response.data['type']
+				});
+			});
 		this.state = {
 			message: "",
-			nums: [],
+			history: ["Welcome to [insert app name]! My job is to help connect you to resources such as free or affordable medical or mental health treatment. How can I help?"],
 			current: 0,
 		};
 		this.geolocRef = React.createRef();
@@ -35,27 +51,75 @@ class Grids extends Component {
 		this.handleBackwardClick = this.handleBackwardClick.bind(this);
 		this.handleCoordinates = this.handleCoordinates.bind(this);
 	}
+	// async componentWillMount() {
+	// 	let message;
+	// 	await axios.post('http://localhost:5000/msg', 
+	// 		{
+	// 			text: ""
+	// 		},
+	// 		{
+	// 			headers: {
+	// 				'Access-Control-Allow-Origin': '*',
+	// 				'Content-Type': 'application/x-www-form-urlencoded'
+	// 			}
+	// 		}).then(response => {
+	// 			console.log(response);
+	// 			message = response;
+	// 		});
+	// 		this.setState({
+	// 		context: message.data['context'],
+	// 		history: this.state.history.concat(message.data['text']),
+	// 		current: this.state.history.length - 1,
+	// 		type: message.data['type']
+	// 	});
+	// }
 
 	async handleSubmit(event) {
 		event.preventDefault();
 		this.setState({message: ""});
 		// Handle fetch here
 		let message;
-		await axios.post('http://localhost:5000/msg', 
-		{
-			message: this.state.message
-		},
-		{
-			headers: {
-				'Access-Control-Allow-Origin': '*',
-				'Content-Type': 'application/x-www-form-urlencoded'
-			}
-		}).then(response => message = response);
-		this.setState({nums: this.state.nums.concat(message.data)});
+		if (this.state.context === null) {
+			await axios.post('http://localhost:5000/msg', 
+			{
+				text: this.state.message
+			},
+			{
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then(response => {
+				console.log(response);
+				message = response;
+			});
+		} else {
+			await axios.post('http://localhost:5000/msg', 
+			{
+				text: this.state.message,
+				context: this.state.context
+			},
+			{
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then(response => {
+				console.log(response);
+				message = response;
+			});
+		}
+		this.setState({
+			context: message.data['context'],
+			history: this.state.history.concat(message.data['text']),
+			current: this.state.history.length - 1,
+			type: message.data['type']
+		});
+		console.log(message.data['context'])
 	}
 
 	handleChange(event) {
-		console.log(event.target.value);
+		// console.log(event.target.value);
 		this.setState({message: event.target.value});
 	}
 
@@ -74,7 +138,7 @@ class Grids extends Component {
 	}
 	handleForwardClick(event) {
 		console.log((this.geolocRef.current.state.coords));
-		if (this.state.current + 1 < this.state.nums.length)
+		if (this.state.current + 1 < this.state.history.length)
 			this.setState({current: this.state.current + 1});
 		else
 			alert(this.current + ' No!');
@@ -89,65 +153,53 @@ class Grids extends Component {
 
 	render() {
 		return (
-			<Grid container spacing={8} >
-				{this.getComponent} 
-				<Geolocation ref={this.geolocRef} />
-				<AppBar style={{borderRadius: "5px", backgroundColor: "#E8EAF6", minHeight:"300px", display: 'flex', justifyContent: 'center', alignItems: 'center'}} color="">
-						<Toolbar style={{backgroundColor: "#E8EAF6"}}>
-							<Typography style={{backgroundColor: "#E8EAF6"}}>
-								<CSSTransitionGroup
-									transitionName="appear" 
-									transitionAppear={true}
-									transitionAppearTimeout={500}
-									transitionEnterTimeout={500}
-									transitionLeave={false}>
-									<h2 key={this.state.current} style={{ fontSize: "60px", backgroundColor: "#E8EAF6"}}>
-									 	Current: {this.state.nums[this.state.current]}
-									</h2>
-								</CSSTransitionGroup>
-							</Typography>
-						</Toolbar>
-					</AppBar>
-				<Grid style={{backgroundColor: "red", position: "relative", top: 0}} item xs={12} sm={12} md={12} lg={12}>
-					
 
-				</Grid>
-				<Grid item xs={12} sm={12} md={12} lg={12}>
-					<div className="App">
-						<header className="App-header">
-							<h1 className="App-title">{this.state.nums.join()}</h1>
-							
-								
-			
-						</header>
-						<div className = "center">
-							<Grid container spacing={24}>
-									<Grid item xs={2}>
-										<img src={left} className="left-arrow" onClick={this.handleBackwardClick}/>
-									</Grid>
-									<Grid item xs={8}>
-										<Card className="">
-										</Card>
-									</Grid>
-									<Grid item xs={2}>
-										<img src={right} className="right-arrow" onClick={this.handleForwardClick}/>
-									</Grid>
-							</Grid>
+			<div style={{marginBottom: '40px', flexGrow: 1}}>
+				<Grid container style={{width:'100%'}}>
+					<Geolocation ref={this.geolocRef} />
+					<Grid item xs md onClick={this.handleBackwardClick} style={{width: '100%', cursor: 'pointer', display: 'flex', justifyContent: 'flex-start', alignItems: 'stretch'}}>
+						<div className="arrow">
+							<img src={left} className="left-arrow"  />
 						</div>
-						<div className = "user">
-							<form className="message-form" onSubmit={this.handleSubmit}>
-								<MuiThemeProvider theme={theme}>	
-								<Input fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px"}} />
-								<input type="submit" value="submit" hidden />
-								</MuiThemeProvider>
-							</form>
+					</Grid>
+					<Grid item xs={11} md={11}>
+						<AppBar position="static" style={{borderRadius: "30px", backgroundColor: "#E8EAF6", minHeight:"300px", display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: "0"}} color="">
+							<Toolbar style={{backgroundColor: "#E8EAF6"}}>
+
+								<Typography style={{backgroundColor: "#E8EAF6"}}>
+
+									<CSSTransitionGroup
+										transitionName="appear" 
+										transitionAppear={true}
+										transitionAppearTimeout={500}
+										transitionEnterTimeout={500}
+										transitionLeave={false}>
+										<h2 className="output" key={this.state.current} style={{ fontSize: "24px", backgroundColor: "#E8EAF6"}}>
+										 	{this.state.history[this.state.current]}
+										</h2>
+									</CSSTransitionGroup>
+								</Typography>
+							</Toolbar>
+						</AppBar>
+					</Grid>
+					<Grid item xs md style={{cursor: 'pointer', display: 'flex', justifyContent: 'flex-end', alignItems: 'stretch'}}>
+						<div className="arrow">
+							<img src={right} className="right-arrow" onClick={this.handleForwardClick} />
 						</div>
-					</div>
+					</Grid>
 				</Grid>
-			</Grid>
+				<div className = "user">
+					<form className="message-form" onSubmit={this.handleSubmit}>
+						<MuiThemeProvider theme={theme}>	
+						<Input fullWidth={true} type="type" value={this.state.message} onChange={this.handleChange} style={{fontSize: "50px"}} />
+						<input type="submit" value="submit" hidden />
+						</MuiThemeProvider>
+					</form>
+				</div>
+			</div>
 		);
 	}
-}
+}	
 
 const theme = createMuiTheme({
   overrides: {

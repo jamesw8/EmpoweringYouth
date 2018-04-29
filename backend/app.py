@@ -3,6 +3,7 @@ from watson_developer_cloud import AssistantV1
 import pandas as pd
 import os
 import json
+from flask_cors import CORS
 from data import get_info
 
 data_csv = "datdatatho.csv"
@@ -14,12 +15,19 @@ assistant = AssistantV1(
 assistant.set_http_config({'timeout': 100})
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/msg", methods=["POST"])
 def process_message():
-    if "context" in request.form:
+    req = json.loads(list(request.form.keys())[0])
+    # print(req)
+    if "context" in req:
+        print(req['text'])
+        print(req['context'])
+
+    if "context" in req:
         response = assistant.message(workspace_id=os.environ['IBM_WORKSPACE_ID'],
-            input={'text': request.form['text']}, context= json.loads(request.form['context']))
+            input={'text': req['text']}, context= req['context'])
     else:
         response = assistant.message(workspace_id=os.environ['IBM_WORKSPACE_ID'],
             input={'text': ""})

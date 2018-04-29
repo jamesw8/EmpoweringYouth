@@ -19,10 +19,10 @@ html, body {
 }
 
 .App-header {
-  height: 150px;
-  padding: 20px;
+  /*height: 150px;*/
+  /*padding: 20px;*/
   color: black;
-  margin-bottom: 1.5em;
+  /*margin-bottom: 1.5em;*/
 }
 
 .App-title {
@@ -58,6 +58,14 @@ html, body {
   transition: opacity 500ms ease-in;
 }
 
+/*.left-arrow, .right-arrow {
+  z-index: 1101;
+}*/
+.arrow {
+  /*z-index: 1101;*/
+  background-color: lightgray;
+  opacity: 2%;
+}
 .user {
     width: 100%;
     position: absolute;
