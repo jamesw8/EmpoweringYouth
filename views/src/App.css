@@ -1,33 +1,43 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
 * {
-  background-color: #F5F5F5;
+  /*background-color: #F5F5F5;*/
+  
 }
 
+
 html, body {
+  overflow: scroll;
   padding: 1em;
   height: 100%;
   position: relative;
-  border-color: black;
+  font-family: 'Raleway', sans-serif;
+}
+
+p {
+  font-style: none;
 }
 
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  
 }
 
 .App-header {
   /*height: 150px;*/
   /*padding: 20px;*/
   color: black;
-  /*margin-bottom: 1.5em;*/
+
+  margin-bottom: 1.5em;
+  text-align: center;
+ 
+
 }
 
 .App-title {
   font-size: 1.5em;
   animation: appear 3s ease 0s 1 normal;
+  width: 80%;
+  
 }
 
 .App-intro {
@@ -58,21 +68,82 @@ html, body {
   transition: opacity 500ms ease-in;
 }
 
-/*.left-arrow, .right-arrow {
-  z-index: 1101;
-}*/
+
 .arrow {
   /*z-index: 1101;*/
   background-color: lightgray;
   opacity: 2%;
 }
-.user {
-    width: 100%;
-    position: absolute;
-    bottom: 150px;
-    
-}
+
 
 input {
   font-size: large;
+}
+
+.container {
+   background-color: #009688;
+   width: 85%;
+   height: 100%;
+   border-radius: 0.8em;
+   margin: auto;
+   padding-top: 16px;
+}
+
+.left-arrow {
+   width: 100%;
+   height: 680px;
+   border-radius: 0.8em;
+   margin: 0;
+}
+
+.right-arrow {
+   width: 100%;
+   height: 680px;
+   border-radius: 0.8em;
+   margin: 0;
+}
+
+.msg {
+   width: 100%;
+   font-size: 72px;
+   border-radius: 0.8em;
+   margin: 0;
+   text-align: center;
+   color: white;
+   padding: 16px;
+   height: 10%;
+
+}
+
+.main {
+  height: 90%;
+}
+
+.talk {
+   width: 100%;
+   height: 100%;
+   border-radius: 0.8em;
+   margin: 0;
+}
+
+.watson {
+  background-color: #F5F5F5;
+  border-radius: 0.8em;
+  width: 100%;
+  margin: auto;
+  font-size: 56px;
+  padding: 16px;
+  min-height: 500px;
+  box-sizing: border-box;
+  margin-top: 12px;
+}
+
+.user {
+  background-color: #F5F5F5;
+  border-radius: 1em;
+  width: 100%;
+  margin: auto;
+  padding: 16px;
+  min-height: 100px;
+  margin-top: 24px;
 }
