@@ -35,7 +35,7 @@ def process_message():
     retval = {}
     if response["output"]["text"][-1][:2] == "%%":
         retval["type"] = "info"
-        retval["info"] = get_info(response["output"]["text"])
+        retval["text"] = get_info(response["output"]["text"])
 
     else:
         retval["type"] = "question"
