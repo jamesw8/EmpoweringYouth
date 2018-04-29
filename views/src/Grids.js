@@ -192,6 +192,7 @@ class Grids extends Component {
 												<p className="output" key={this.state.current}>
 										 			{this.state.history[this.state.current][0]}
 												</p>
+												
 											</CSSTransitionGroup>
 										</Grid>
 									</Grid>
